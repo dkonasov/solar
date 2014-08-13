@@ -1,0 +1,257 @@
+<html>
+	<head>
+		<title>My first Three.js app</title>
+		<style>canvas { width: 100%; height: 100% }</style>
+	</head>
+	<body>
+	<a href="#" class="start" id="startButton">Start</a><br/>
+	Орбита: <select class="orbit">
+	<option value="false">Нет</option>
+	<option value="sphere">Меркурий</option>
+	<option value="venus">Венера</option>
+	<option value="earth">Земля</option>
+	
+	</select>
+		<script src="js/three.min.js"></script>
+		<script src="js/jquery-1.11.1.min.js"></script>
+		<script src="js/dat.gui.min.js"></script>
+		<script>
+    var bitmap = new Image();
+    bitmap.src = 'cube.gif'; // Pre-load the bitmap, in conjunction with the Start button, to avoid any potential THREE.ImageUtils.loadTexture async issues.
+    bitmap.onerror = function () {
+      console.error("Error loading: " + bitmap.src);
+    }
+	
+	var sunimage = new Image();
+    sunimage.src = 'sun.png'; // Pre-load the bitmap, in conjunction with the Start button, to avoid any potential THREE.ImageUtils.loadTexture async issues.
+    sunimage.onerror = function () {
+      console.error("Error loading: " + sunimage.src);
+    }
+
+
+    var scene = new THREE.Scene(); // Create a Three.js scene object.
+    var camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.01, 1000); // Define the perspective camera's attributes.
+
+    var renderer = window.WebGLRenderingContext ? new THREE.WebGLRenderer() : new THREE.CanvasRenderer(); // Fallback to canvas renderer, if necessary.
+    renderer.setSize(window.innerWidth, window.innerHeight); // Set the size of the WebGL viewport.
+    document.body.appendChild(renderer.domElement); // Append the WebGL viewport to the DOM.
+
+    // Be aware that a light source is required for MeshPhongMaterial to work:
+    var pointLight = new THREE.PointLight(0xFFFFFF); // Set the color of the light source (white).
+    pointLight.position.set(0, 0, 0); // Position the light source at (x, y, z).
+    scene.add(pointLight); // Add the light source to the scene.
+	var stars=new THREE.HemisphereLight(0xffffff, 0xffffff, 0.03);
+	scene.add(stars);
+    var texture = THREE.ImageUtils.loadTexture(bitmap.src); // Create texture object based on the given bitmap path.
+    var material = new THREE.MeshPhongMaterial({ map: texture }); // Create a material (for the spherical mesh) that reflects light, potentially causing sphere surface shadows.
+    var geometry = new THREE.SphereGeometry(0.2, 64, 64); // Radius size, number of vertical segments, number of horizontal rings.
+
+    var sphere = new THREE.Mesh(geometry, material); // Create a mesh based on the specified geometry (cube) and material (blue skin).
+    scene.add(sphere); // Add the sphere at (0, 0, 0).
+
+	var texture = THREE.ImageUtils.loadTexture(sunimage.src); // Create texture object based on the given bitmap path.
+    var material = new THREE.MeshBasicMaterial({ map: texture }); // Create a material (for the spherical mesh) that reflects light, potentially causing sphere surface shadows.
+    material.emissive="0xffffff";
+	var geometry = new THREE.SphereGeometry(69.5, 64, 64); // Radius size, number of vertical segments, number of horizontal rings.
+	
+	
+	
+    var sun = new THREE.Mesh(geometry, material); // Create a mesh based on the specified geometry (cube) and material (blue skin).
+    sun.castShadow = true;
+	scene.add(sun); // Add the sphere at (0, 0, 0).
+	
+	var texture = THREE.ImageUtils.loadTexture('venus.jpg'); // Create texture object based on the given bitmap path.
+    var material = new THREE.MeshPhongMaterial({ map: texture }); // Create a material (for the spherical mesh) that reflects light, potentially causing sphere surface shadows.
+	var geometry = new THREE.SphereGeometry(0.6, 64, 64);
+	var venus = new THREE.Mesh(geometry, material);
+	scene.add(venus);
+	
+	//Земля
+	var texture = THREE.ImageUtils.loadTexture('earth.jpg'); // Create texture object based on the given bitmap path.
+    var material = new THREE.MeshPhongMaterial({ map: texture, emmisive:0xffffff }); // Create a material (for the spherical mesh) that reflects light, potentially causing sphere surface shadows.
+	var geometry = new THREE.SphereGeometry(0.63, 64, 64);
+	var earth = new THREE.Mesh(geometry, material);
+	scene.add(earth);
+	
+	var texture = THREE.ImageUtils.loadTexture('moon.jpg'); // Create texture object based on the given bitmap path.
+    var material = new THREE.MeshPhongMaterial({ map: texture }); // Create a material (for the spherical mesh) that reflects light, potentially causing sphere surface shadows.
+	var geometry = new THREE.SphereGeometry(0.17, 64, 64);
+	var moon = new THREE.Mesh(geometry, material);
+	scene.add(moon);
+	
+	var texture = THREE.ImageUtils.loadTexture('moon.jpg'); // Create texture object based on the given bitmap path.
+    var material = new THREE.MeshPhongMaterial({ map: texture }); // Create a material (for the spherical mesh) that reflects light, potentially causing sphere surface shadows.
+	var geometry = new THREE.SphereGeometry(0.0055, 64, 64);
+	var phobos = new THREE.Mesh(geometry, material);
+	scene.add(phobos);
+	
+	var texture = THREE.ImageUtils.loadTexture('moon.jpg'); // Create texture object based on the given bitmap path.
+    var material = new THREE.MeshPhongMaterial({ map: texture }); // Create a material (for the spherical mesh) that reflects light, potentially causing sphere surface shadows.
+	var geometry = new THREE.SphereGeometry(0.0075, 64, 64);
+	var daemos = new THREE.Mesh(geometry, material);
+	scene.add(daemos);
+	
+	var texture = THREE.ImageUtils.loadTexture('io.jpg'); // Create texture object based on the given bitmap path.
+    var material = new THREE.MeshPhongMaterial({ map: texture }); // Create a material (for the spherical mesh) that reflects light, potentially causing sphere surface shadows.
+	var geometry = new THREE.SphereGeometry(0.18, 64, 64);
+	var io = new THREE.Mesh(geometry, material);
+	scene.add(io);
+	
+	var texture = THREE.ImageUtils.loadTexture('mars.jpg'); // Create texture object based on the given bitmap path.
+    var material = new THREE.MeshPhongMaterial({ map: texture }); // Create a material (for the spherical mesh) that reflects light, potentially causing sphere surface shadows.
+	var geometry = new THREE.SphereGeometry(0.33, 64, 64);
+	var mars = new THREE.Mesh(geometry, material);
+	scene.add(mars);
+	
+	var texture = THREE.ImageUtils.loadTexture('jupiter.jpg'); // Create texture object based on the given bitmap path.
+    var material = new THREE.MeshPhongMaterial({ map: texture }); // Create a material (for the spherical mesh) that reflects light, potentially causing sphere surface shadows.
+	var geometry = new THREE.SphereGeometry(7.1, 64, 64);
+	var jupiter = new THREE.Mesh(geometry, material);
+	scene.add(jupiter);
+	
+    camera.position.z = 91; // Move the camera away from the origin, down the positive z-axis.
+	n=0;
+	radius=90;
+	sphere.orbitradius=0.4;
+	venus.orbitradius=0.9;
+	earth.orbitradius=1;
+	orbitpos=0;
+	venus.radius=180;
+	earth.radius=270;
+	mars.radius=360;
+	moon.radius=5;
+	phobos.radius=0.94;
+	daemos.radius=2.3;
+	io.radius=12;
+	jupiter.radius=450;
+	speed=0.00047;
+	venus.speed=0.00035;
+	earth.speed=0.00029;
+	moon.speed=0.01;
+	mars.speed=0.00024;
+	jupiter.speed=0.00029;
+	phobos.speed=0.00001;
+	daemos.speed=0.00001;
+	io.speed=0.00001;
+	venus.n=30;
+	earth.n=40;
+	moon.n=90;
+	mars.n=40;
+	phobos.n=40;
+	daemos.n=40;
+	io.n=40;
+	jupiter.n=40;
+	move=true;
+	earth.rotation.x=0.13;
+	mars.rotation.x=0.1;
+	jupiter.rotation.x=0.11;
+	earth.anglespeed=0.001;
+	mars.anglespeed=0.001;
+	jupiter.anglespeed=0.001;
+    var render = function () {
+	camspeed=controls.speed;
+      sphere.rotation.x += 0.002; // Rotate the sphere by a small amount about the x- and y-axes.
+      sphere.rotation.y += 0.005;
+	  if(planet){
+	  camera.lookAt(planet.position);
+	  m=orbitpos*(Math.PI/180);
+	  camera.position.x=planet.orbitradius*Math.sin(m)+planet.position.x;
+	  camera.position.z=planet.orbitradius*Math.cos(m)+planet.position.z;
+	  orbitpos+=camspeed;
+	  }
+	  if(move){
+	    if(n==360){n=0;}
+		if(venus.n==360){venus.n=0;}
+		if(earth.n==360){earth.n=0;}
+		if(moon.n==360){moon.n=0;}
+		if(mars.n==360){mars.n=0;}
+		if(phobos.n==360){phobos.n=0;}
+		if(daemos.n==360){daemos.n=0;}
+		if(jupiter.n==360){jupiter.n=0;}
+		if(io.n==360){io.n=0;}
+	  var m=n*(Math.PI/180);
+	  sphere.position.x=radius*Math.sin(m);
+	  sphere.position.z=radius*Math.cos(m);
+	  m=venus.n*(Math.PI/180);
+	  venus.position.x=venus.radius*Math.sin(m);
+	  venus.position.z=venus.radius*Math.cos(m);
+	  m=earth.n*(Math.PI/180);
+	  earth.position.x=earth.radius*Math.sin(m);
+	  earth.position.z=earth.radius*Math.cos(m);
+	  m=moon.n*(Math.PI/180);
+	  moon.position.x=moon.radius*Math.sin(m)+earth.position.x;
+	  moon.position.z=moon.radius*Math.cos(m)+earth.position.z;
+	  m=phobos.n*(Math.PI/180);
+	  phobos.position.x=phobos.radius*Math.sin(m)+mars.position.x;
+	  phobos.position.z=phobos.radius*Math.cos(m)+mars.position.z;
+	  m=daemos.n*(Math.PI/180);
+	  daemos.position.x=daemos.radius*Math.sin(m)+mars.position.x;
+	  daemos.position.z=daemos.radius*Math.cos(m)+mars.position.z;
+	   m=io.n*(Math.PI/180);
+	  io.position.x=io.radius*Math.sin(m)+jupiter.position.x;
+	  io.position.z=io.radius*Math.cos(m)+jupiter.position.z;
+	  m=mars.n*(Math.PI/180);
+	  mars.position.x=mars.radius*Math.sin(m);
+	  mars.position.z=mars.radius*Math.cos(m);
+	  m=jupiter.n*(Math.PI/180);
+	  jupiter.position.x=jupiter.radius*Math.sin(m);
+	  jupiter.position.z=jupiter.radius*Math.cos(m);
+	  earth.rotation.y+=earth.anglespeed;
+	  mars.rotation.y+=mars.anglespeed;
+	  jupiter.rotation.y+=jupiter.anglespeed;
+	  n+=speed;
+	  venus.n+=venus.speed;
+	  earth.n+=earth.speed;
+	  moon.n+=moon.speed;
+	  mars.n+=mars.speed;
+	  phobos.n+=phobos.speed;
+	  daemos.n+=daemos.speed;
+	  jupiter.n+=jupiter.speed;
+	  io.n+=io.speed;
+	  }
+      renderer.render(scene, camera); // Each time we change the position of the cube object, we must re-render it.
+      requestAnimationFrame(render); // Call the render() function up to 60 times per second (i.e., up to 60 animation frames per second).
+    };
+
+    document.getElementById('startButton').addEventListener('click', function () {
+      render(); // Start the rendering of the animation frames.
+    }, false);
+  </script>
+  </body>
+  <script>
+  planet=false;
+   var controls = new function() {
+    this.speed = 0.1;
+    this.sensivity = 0.1;
+	this.y = 0.1;
+}
+  
+  $(document).on('keypress', function(e){
+  if(e.which==97) camera.rotation.y-=controls.sensivity;
+  if(e.which==100) camera.rotation.y+=controls.sensivity;
+  if(!planet){
+  
+  if(e.which==119) {camdx=camspeed*Math.sin(camera.rotation.y);camdz=camspeed*Math.cos(camera.rotation.y); camera.position.x-=camdx; camera.position.z-=camdz; console.log(camdx+' '+camdz)}
+  if(e.which==115) {camdx=camspeed*Math.sin(camera.rotation.y);camdz=camspeed*Math.cos(camera.rotation.y); camera.position.x+=camdx; camera.position.z+=camdz; console.log(camdx+' '+camdz)}
+  if(e.which==113) camera.rotation.x+=1;
+  if(e.which==101) camera.rotation.x-=1;
+  if(e.which==122) camera.position.z-=1;
+  if(e.which==120) camera.position.z+=1;
+  if(e.which==32) move=!move;
+  }
+  });
+  $('.orbit').on('change', function(){
+  
+  
+  planet=eval($(this).val());
+  
+  
+  });
+ 
+
+var gui = new dat.GUI();
+gui.add(controls, 'speed').min(0).max(6).step(0.01);
+gui.add(controls, 'sensivity').min(0).max(6).step(0.01);
+gui.add(controls, 'y').min(0).max(6).step(0.01);
+  </script>
+</html>
